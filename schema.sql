@@ -10,4 +10,4 @@ CREATE TABLE notes (
 
 INSERT INTO notes (title, contents)
 VALUES 
-('title here', 'contents here'),
+('title here', 'contents here');
