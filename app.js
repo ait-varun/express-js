@@ -1,56 +1,22 @@
-// const express = require("express");
-// const app = express();
-// const port = process.env.PORT || 3001;
-
-// // this on client
-// app.get("/api", (req, res) => {
-//   res.send({
-//     message: "This is from express server backend update",
-//     people: {
-//       name: [
-//         { name: "Jessie Mendez" },
-//         { name: "Lena Brady" },
-//         { name: "Isaiah Paul" },
-//         { name: "Scott Cruz" },
-//         { name: "Lizzie Roberts" },
-//         { name: "Stella Simon" },
-//         { name: "Lois Armstrong" },
-//       ],
-//     },
-//   });
-// });
-
-// // this on server
-// app.listen(port, () => {
-//   console.log(`Example app listening on this port ${port}`);
-// });
-
 //TODO: working
 
 import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
 import logger from "./logger.js";
-
+import data from "./data.js";
+const port = process.env.PORT;
 import { getNotes, getNote, createNote } from "./database.js";
 
 const app = express();
 
+let people = data.people;
 app.use(express.json());
 app.use(express.static("./public"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// const logger = (req, res, next) => {
-//   const method = req.method;
-//   const url = req.url;
-//   const time = new Date().getFullYear();
-//   console.log(method, url, time);
-//   // res.send("testing");  // this will show on this route
-//   next();
-// };
-
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./pages/index.html"));
 });
 app.get("/notes", async (req, res) => {
@@ -70,11 +36,11 @@ app.post("/notes", async (req, res) => {
   res.status(201).send(note);
 });
 
+app.get("/api/people", (req, res) => {
+  res.status(200).json({ success: true, data: people });
+});
 //send response to all routes which are not defined/exist
-app.all("*", logger, async (req, res) => {
-  // const method = req.method;
-  // const url = req.url;
-  // console.log(method, url);
+app.all("*", [logger], async (req, res) => {
   res.status(404).send("Sorry this route does not exist.from app");
 });
 
@@ -83,8 +49,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke 😒");
 });
 
-app.listen(8080, () => {
+app.listen(port, () => {
   console.log("Server is running on port 8080");
 });
-
-
