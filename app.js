@@ -30,6 +30,7 @@
 import express from "express";
 import { fileURLToPath } from "url";
 import path from "path";
+import logger from "./logger.js";
 
 import { getNotes, getNote, createNote } from "./database.js";
 
@@ -39,6 +40,15 @@ app.use(express.json());
 app.use(express.static("./public"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// const logger = (req, res, next) => {
+//   const method = req.method;
+//   const url = req.url;
+//   const time = new Date().getFullYear();
+//   console.log(method, url, time);
+//   // res.send("testing");  // this will show on this route
+//   next();
+// };
 
 app.get("/home", (req, res) => {
   res.sendFile(path.join(__dirname, "./pages/index.html"));
@@ -61,7 +71,10 @@ app.post("/notes", async (req, res) => {
 });
 
 //send response to all routes which are not defined/exist
-app.all("*", async (req, res) => {
+app.all("*", logger, async (req, res) => {
+  // const method = req.method;
+  // const url = req.url;
+  // console.log(method, url);
   res.status(404).send("Sorry this route does not exist.from app");
 });
 
