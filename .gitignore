@@ -2,3 +2,7 @@ node_modules
 .env.*
 .env
 !.env.example
+.idea/vcs.xml
+.gitignore
+.idea/modules.xml
+.idea/express.iml
