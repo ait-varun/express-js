@@ -8,6 +8,7 @@ CREATE TABLE notes (
   created TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+
 INSERT INTO notes (title, contents)
 VALUES 
 ('title here', 'contents here');
